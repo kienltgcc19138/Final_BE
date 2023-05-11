@@ -7,22 +7,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import vn.kien.event.eventbe.common.EnumConst;
 import vn.kien.event.eventbe.converter.TicketConverter;
 import vn.kien.event.eventbe.entity.Event;
 import vn.kien.event.eventbe.entity.Ticket;
+import vn.kien.event.eventbe.entity.UsersEvent;
+import vn.kien.event.eventbe.exception.ErrorCode;
+import vn.kien.event.eventbe.exception.ServiceException;
 import vn.kien.event.eventbe.repository.IEventRepository;
 import vn.kien.event.eventbe.repository.ITicketRepository;
+import vn.kien.event.eventbe.repository.IUsersEventRepository;
 import vn.kien.event.eventbe.request.CreateTicketRequest;
 import vn.kien.event.eventbe.request.SearchTicketRequest;
 import vn.kien.event.eventbe.response.TicketResponse;
 import vn.kien.event.eventbe.utils.PageableUtils;
 import vn.kien.event.eventbe.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 
 @Service
@@ -30,10 +32,14 @@ import java.util.LinkedHashSet;
 public class TicketService {
     private final ITicketRepository ticketRepository;
     private final IEventRepository eventRepository;
-
+    private final IUsersEventRepository usersEventRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public TicketResponse createFeedBack(CreateTicketRequest request, String createdBy) {
+        List<UsersEvent> usersEvents = usersEventRepository.findAllByEvent_EventIdAndUsers_UsersId(request.getEventId(), createdBy);
+        if (CollectionUtils.isEmpty(usersEvents)) {
+            throw new ServiceException(ErrorCode.USER_NOT_JOIN_EVENT);
+        }
         Ticket ticket = new Ticket();
         ticket.setName(request.getName());
         ticket.setObjectType(EnumConst.TicketTypeEnum.FEED_BACK.toString());

@@ -24,10 +24,12 @@ import java.util.Optional;
 @Repository
 public interface IUsersEventRepository extends JpaRepository<UsersEvent, UsersEventId>, JpaSpecificationExecutor {
     @EntityGraph("users-event-joined")
-    List<UsersEvent> findAllByEvent_EventIdAndIsJoin(Long eventId,Boolean isJoin);
+    List<UsersEvent> findAllByEvent_EventIdAndIsJoin(Long eventId, Boolean isJoin);
 
-//    @EntityGraph("users-event-joined")
+    //    @EntityGraph("users-event-joined")
     Page<UsersEvent> findAll(Specification specification, Pageable pageable);
 
     List<UsersEvent> findAllByUsers_UsersId(String userId);
+
+    List<UsersEvent> findAllByEvent_EventIdAndUsers_UsersId(Long eventId, String userId);
 }
