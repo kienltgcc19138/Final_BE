@@ -17,11 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Le-Hong-Quan
- * Date: 19/02/2023
- * Time: 12:01
- */
+
 @Configuration
 @EnableWebMvc
 @EnableConfigurationProperties

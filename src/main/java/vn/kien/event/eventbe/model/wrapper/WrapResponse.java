@@ -9,11 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Le-Hong-Quan
- * Date: 19/02/2023
- * Time: 11:31
- */
 @Getter
 @Setter
 public class WrapResponse<T> {
